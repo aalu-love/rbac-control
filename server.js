@@ -3,33 +3,36 @@ const express = require("express");
 const connectDB = require("./config/database");
 
 // Seeders
-const { seedResources } = require("./utils/seedResources");
-const { seedScopes } = require("./utils/seedScope");
-const { seedDatabase } = require("./routes");
-const { assignScopesToRoles } = require("./utils/seedRoleAndScope");
-const { assignRolesToUsers } = require("./utils/seedRoleAndUser");
+const {
+    seedResources,
+    seedDatabase,
+    seedRoleAndScope,
+    seedRoleAndUser,
+} = require("./utils/seed");
 
 // Routes
-const authRoutes = require("./routes/authRoutes");
-const postRoutes = require("./routes/postRoutes");
-const userRoutes = require("./routes/userRoutes");
-const commentRoutes = require("./routes/commentRoutes");
+const {
+    authRouter,
+    commentRouter,
+    postRouter,
+    userRouter,
+} = require("./routes");
 const { authenticate } = require("./middleware/auth");
 
 const app = express();
 connectDB();
 
 app.use(express.json());
-app.use("/api/auth", authRoutes);
-app.use("/api/resource", authenticate, postRoutes);
-app.use("/api/resource", authenticate, userRoutes);
-app.use("/api/resource", authenticate, commentRoutes);
+app.use("/api/auth", authRouter);
+app.use("/api/resource", authenticate, postRouter);
+app.use("/api/resource", authenticate, userRouter);
+app.use("/api/resource", authenticate, commentRouter);
 
 app.get("/seeder", async (req, res) => {
-    await seedResources();
-    await seedScopes();
-    await assignScopesToRoles();
-    await assignRolesToUsers();
+    await seedResources(); // Seed all resources which is required
+    await seedRoleAndScope(); // Seed all roles and scopes
+    await seedRoleAndUser(); // Assign roles to users
+    await assignRolesToUsers(); // Assign roles to users
     return res.send("success");
 });
 

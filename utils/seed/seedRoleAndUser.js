@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Role = require("../models/Role");
 
-async function assignRolesToUsers() {
+async function seedRoleAndUser() {
     const adminRole = await Role.findOne({ name: "admin" });
     const editorRole = await Role.findOne({ name: "editor" });
     const viewerRole = await Role.findOne({ name: "viewer" });
@@ -33,4 +33,4 @@ async function assignRolesToUsers() {
     console.log("User assigned roles!");
 }
 
-module.exports = { assignRolesToUsers };
+module.exports = { seedRoleAndUser };

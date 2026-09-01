@@ -1,7 +1,7 @@
 const Role = require("../models/Role");
 const Scope = require("../models/Scope");
 
-async function assignScopesToRoles() {
+async function seedRoleAndScope() {
     const rPostScope = await Scope.findOne({ name: "r_post" });
     const rwPostScope = await Scope.findOne({ name: "rw_post" });
     const rwxPostScope = await Scope.findOne({ name: "rwx_post" });
@@ -41,4 +41,4 @@ async function assignScopesToRoles() {
     console.log("Roles assigned scopes!");
 }
 
-module.exports = { assignScopesToRoles };
+module.exports = { seedRoleAndScope };

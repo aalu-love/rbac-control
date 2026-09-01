@@ -1,33 +1,6 @@
-const Role = require("../models/Role");
-const Permission = require("../models/Permission");
+import { router as authRouter } from "./authRoutes.js";
+import { router as commentRouter } from "./commentRoutes.js";
+import { router as postRouter } from "./postRoutes.js";
+import { router as userRouter } from "./userRoutes.js";
 
-const seedDatabase = async () => {
-    const permissions = [
-        {
-            name: "manage_users",
-            capabilities: ["create", "read", "update", "delete"],
-        },
-        {
-            name: "manage_posts",
-            capabilities: ["create", "read", "update", "delete"],
-        },
-    ];
-
-    const createdPermissions = await Permission.insertMany(permissions);
-
-    const roles = [
-        {
-            name: "Admin",
-            permissions: createdPermissions.map((perm) => perm._id),
-        },
-        { name: "Editor", permissions: [createdPermissions[1]._id] },
-    ];
-
-    await Role.insertMany(roles);
-    console.log("Database seeded successfully");
-    process.exit();
-};
-
-module.exports = {
-    seedDatabase,
-};
+export { authRouter, commentRouter, postRouter, userRouter };
