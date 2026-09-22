@@ -156,9 +156,8 @@ DELETE /api/roles/:id            Delete role
 ### User Roles
 
 ```text
-POST   /api/users/:userId/roles  Assign role to user
-DELETE /api/users/:userId/roles/:roleId
-                                  Remove role from user
+POST   /api/users/:userId/roles          Assign role to user
+DELETE /api/users/:userId/roles/:roleId  Remove role from user
 ```
 
 ### Posts
