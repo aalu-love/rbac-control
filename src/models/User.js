@@ -19,4 +19,9 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
+// Compare plain-text password with hashed password
+UserSchema.methods.comparePassword = function (password, hashedPassword) {
+  return bcrypt.compare(password, hashedPassword);
+};
+
 module.exports = mongoose.model("User", UserSchema);

@@ -1,17 +1,59 @@
 services:
-    mongodb:
-        image: mongo:latest
-        container_name: mongodb_container
-        restart: always
-        ports:
-            - "27017:27017"
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: admin
-            MONGO_INITDB_ROOT_PASSWORD: secret
-        volumes:
-            - mongodb_data:/data/db
-            - mongodb_config:/data/configdb
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_container
+    restart: always
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+
+    ports:
+      - "27017:27017"
+
+    # volumes:
+    #   - mongodb_data:/data/db
+    #   - mongodb_config:/data/configdb
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_container
+    restart: always
+
+    ports:
+      - "6379:6379"
+
+    # volumes:
+    #   - redis_data:/data
+
+    command: redis-server --appendonly yes
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: backend
+    restart: always
+
+    # command: npm run dev
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      MONGO_URI: mongodb://admin:secret@mongodb:27017/?authSource=admin
+      REDIS_URL: redis://redis:6379
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+    depends_on:
+      - mongodb
+      - redis
 
 volumes:
-    mongodb_data:
-    mongodb_config:
+  mongodb_data:
+  mongodb_config:
+  redis_data:
